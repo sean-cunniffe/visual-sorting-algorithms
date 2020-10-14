@@ -1,0 +1,18 @@
+<h6 class="card-header" style="text-align: center">use the slider to select the amount to be sorted</h6>
+<div class="controls-container">
+
+<input type="range" class="custom-range slider" min="10" max="200" id="ArraySize"
+       (change)="setArraySize($event.target.value);generateRandomNumberArray(100,sizeOfArray)">
+<select class="custom-select selector" name="sort type"
+        (change)="setSortType($event.target.value);generateRandomNumberArray(100,sizeOfArray)">
+  <option value="Quick Sort">Quick Sort</option>
+  <option value="Bubble Sort">Bubble Sort</option>
+</select>
+<button class="btn btn-primary" id="sortButton" (click)="sort(randomNumberArray)">Sort</button>
+</div>
+<div id="bar-container" class="bar-container">
+  <div *ngFor="let i of randomNumberArray">
+    <div class="bar" [style.height.%] ="i" [style.width.vw]="50/sizeOfArray">
+    </div>
+  </div>
+</div>

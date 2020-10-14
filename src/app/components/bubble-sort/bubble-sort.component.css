@@ -1,0 +1,31 @@
+.bar-container{
+  margin: 0 auto 0 auto;
+  height: 50vh;
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+}
+.bar{
+  width:100%;
+  background: blue;
+  margin-right: 1px;
+}
+
+.slider{
+  width:50%;
+}
+.selector{
+  width: fit-content;
+  margin: 0 5px 0 5px;
+}
+
+.controls-container{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+#sortButton{
+  width:fit-content;
+}
