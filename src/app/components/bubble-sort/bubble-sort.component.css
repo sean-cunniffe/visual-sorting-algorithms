@@ -18,14 +18,20 @@
   width: fit-content;
   margin: 0 5px 0 5px;
 }
-
+.slider-container{
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
 .controls-container{
   padding-top: 10px;
   padding-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  justify-items: center;
 }
 #sortButton{
   width:fit-content;
+  height: fit-content;
 }
