@@ -9,7 +9,7 @@ import {NumberGeneratorService} from '../../services/number-generator.service';
 export class BubbleSortComponent implements OnInit {
 
   randomNumberArray: number[] = [];
-  sortType: string = 'Quick Sort';
+  sortType: string = 'Merge Sort';
   sortId: number = 0;
   constructor(private numberService: NumberGeneratorService) {
   }
@@ -131,7 +131,6 @@ export class BubbleSortComponent implements OnInit {
    * @private
    */
   private prepareSort(randomNumberArray: number[], number: number, number2: number,algorithm:number) {
-    this.disableSortButton(true);
     this.sortActionList = [];
     let mappingArray = randomNumberArray.slice();
     switch(algorithm){
@@ -156,7 +155,6 @@ export class BubbleSortComponent implements OnInit {
      i++;
     if(i>=this.sortActionList.length){
       clearInterval(this.sortId);
-      this.disableSortButton(false);
     }
     },this.getIterationSpeed());
   }
@@ -201,6 +199,7 @@ export class BubbleSortComponent implements OnInit {
   }
 
   setArraySize(sizeOfArray: number) {
+    this.stopSort();
     this.sizeOfArray = sizeOfArray;
   }
 
@@ -304,11 +303,12 @@ export class BubbleSortComponent implements OnInit {
   }
 
   setSortType(value: string) {
+    this.stopSort();
     this.sortType = value;
   }
 
   sort(randomNumberArray: number[]) {
-    this.disableSortButton(true);
+    this.stopSort();
     switch (this.sortType) {
       case 'Quick Sort' :
         this.prepareSort(randomNumberArray,0,randomNumberArray.length - 1,2);
@@ -323,12 +323,12 @@ export class BubbleSortComponent implements OnInit {
         this.prepareSort(randomNumberArray,0,randomNumberArray.length - 1,3);
         break;
     }
-    this.disableSortButton(false);
   }
 
 
   setIterationSpeed(value: number) {
     this.iterationTime = value;
+    this.stopSort();
   }
 
   getIterationSpeed():number{

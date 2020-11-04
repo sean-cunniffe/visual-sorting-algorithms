@@ -12,10 +12,10 @@
   </div>
 <select class="custom-select selector" name="sort type"
         (change)="setSortType($event.target.value);generateRandomNumberArray(100,sizeOfArray);stopSort();">
-  <option value="Quick Sort">Quick Sort</option>
-  <option value="Bubble Sort">Bubble Sort</option>
   <option value="Merge Sort">Merge Sort</option>
   <option value="Selection Sort">Selection Sort</option>
+  <option value="Quick Sort">Quick Sort</option>
+  <option value="Bubble Sort">Bubble Sort</option>
 </select>
 <button class="btn btn-primary" id="sortButton" (click)="sort(randomNumberArray)">Sort</button>
 </div>
