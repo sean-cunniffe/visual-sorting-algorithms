@@ -11,7 +11,7 @@ export class BubbleSortComponent implements OnInit {
   constructor(private numberService: NumberGeneratorService) {
   }
 
-  processText = 'Process Message';
+  processText = '';
 
   randomNumberArray: number[] = [];
   sortType = 'Merge Sort';
@@ -93,11 +93,17 @@ export class BubbleSortComponent implements OnInit {
   quickSortArray(numbers: number[], firstIndex: number, lastIndex: number): void {
     // pick pivot
     while (true) {
-      const pivot = this.pickPivot(numbers, firstIndex, lastIndex);
+      if (firstIndex - lastIndex !== 1 || firstIndex - lastIndex !== -1) {
+        const pivot = this.pickPivot(numbers, firstIndex, lastIndex);
+        if (pivot - lastIndex !== -1 || pivot - lastIndex !== 1) {
+          this.moveNumMapping(lastIndex, pivot, numbers);
+        }
+      }
       // move pivot to end
-      this.moveNumMapping(lastIndex, pivot, numbers);
+
+
       // get first largest than pivot from left
-      const largest = this.firstLargest(numbers, firstIndex, lastIndex);
+      const largest = BubbleSortComponent.firstLargest(numbers, firstIndex, lastIndex);
       // get first smallest than pivot from right
       const smallest = this.firstSmallest(numbers, firstIndex, lastIndex);
       if (largest > smallest) {
@@ -106,13 +112,13 @@ export class BubbleSortComponent implements OnInit {
         // new subArray firstIndex - pivot    pivot+1 - lastIndex
         if (largest - firstIndex > 1) {
           this.quickSortArray(numbers, firstIndex, largest);
-        } else if (largest - firstIndex === 1 && numbers[firstIndex] > numbers[largest]) {
+        } else if (numbers[firstIndex] > numbers[largest]) {
           //  if theres two elements left swap them if left one is bigger
           this.swapNumbersMapping(firstIndex, largest, numbers);
         }
         if (lastIndex - (largest + 1) > 1) {
           this.quickSortArray(numbers, largest + 1, lastIndex);
-        } else if (lastIndex - (largest + 1) === 1 && numbers[largest + 1] > numbers[lastIndex]) {
+        } else if (numbers[largest + 1] > numbers[lastIndex]) {
           //  if theres two elements left swap them if left one is bigger
           this.swapNumbersMapping(largest + 1, lastIndex, numbers);
         }
@@ -122,6 +128,7 @@ export class BubbleSortComponent implements OnInit {
       }
     }
   }
+
 
   /**
    * sorts a copy of array, makes sort action list, interval goes through list and sorts actual array
@@ -151,54 +158,50 @@ export class BubbleSortComponent implements OnInit {
 
 
     let i = 0;
-    let j = 0;
-    let tempIntervalSpeed = this.iterationTime;
-    // does not work
-    switch (this.sortActionList[j][0]) {
-      case 0:
-        tempIntervalSpeed = this.getIterationSpeed() / 1.9;
-        break;
-      case 1:
-        tempIntervalSpeed = this.getIterationSpeed() / 1.9;
-        break;   //  number move
-      case 2:
-        tempIntervalSpeed = this.getIterationSpeed() / 10;
-        break;
-      case 3:
-        tempIntervalSpeed = this.getIterationSpeed() / 10;
-        break;
-      case 4:
-        tempIntervalSpeed = this.getIterationSpeed() / 10;
-        break;
-    }
-    j++;
+
     this.sortId = setInterval(() => {
       const index1: number = (this.sortActionList[i])[1];
       const index2: number = (this.sortActionList[i])[2];
       switch (this.sortActionList[i][0]) {
         case 0:
           this.processText = 'Swapping columns no. ' + index1 + ' and ' + index2;
-          this.swapNumbers(index1, index2, randomNumberArray);
+          BubbleSortComponent.swapNumbers(index1, index2, randomNumberArray);
           break;   //  number swap
         case 1:
           this.processText = 'Moving column from ' + index1 + ' to ' + index2;
-          this.moveNum(index1, index2, randomNumberArray);
+          BubbleSortComponent.moveNum(index1, index2, randomNumberArray);
           break;   //  number move
         case 2:
-          this.colorIndex(index1, index2, this.colorSwapBefore);
+          BubbleSortComponent.colorIndex(index1, index2, this.colorSwapBefore);
+          let tempI = i;
+          while (tempI < this.sortActionList.length) {
+            let tempArr = this.sortActionList[tempI];
+            if (tempArr[0] == 1) {
+              this.processText = 'Moving column from ' + tempArr[2] + ' to ' + tempArr[1];
+              break;
+            } else if (tempArr[0] == 0) {
+              this.processText = 'Swapping columns no. ' + tempArr[1] + ' and ' + tempArr[2];
+              break;
+            } else {
+              tempI++;
+            }
+
+          }
+
           break;
         case 3:
-          this.colorIndex(index1, index2, this.colorSwapAfter);
+          BubbleSortComponent.colorIndex(index1, index2, this.colorSwapAfter);
           break;
         case 4:
-          this.colorIndex(index1, index2, this.colorNeutral);
+          BubbleSortComponent.colorIndex(index1, index2, this.colorNeutral);
           break;
       }
       i++;
       if (i >= this.sortActionList.length) {
         clearInterval(this.sortId);
+        this.processText = 'Finished';
       }
-    }, tempIntervalSpeed);
+    }, this.iterationTime);
   }
 
   mergeSortArray(numbers: number[], startIndex: number, lastIndex: number): void {
@@ -257,19 +260,28 @@ export class BubbleSortComponent implements OnInit {
     const pos1 = firstIndex;
     const pos3 = lastIndex;
     const pos2 = Math.round((lastIndex - firstIndex) / 2) + firstIndex;
+
+    // get the larger of pos1 and pos2
+    let larger = numbers[pos1] > numbers[pos2] ? pos1 : pos2;
+    if (numbers[larger] > numbers[pos3]) {
+      this.swapNumbersMapping(larger, pos3, numbers);
+    }
     if (numbers[pos1] > numbers[pos2]) {
       this.swapNumbersMapping(pos1, pos2, numbers);
     }
-    if (numbers[pos2] > numbers[pos3]) {
-      this.swapNumbersMapping(pos2, pos3, numbers);
-    }
-    if (numbers[pos1] > numbers[pos2]) {
-      this.swapNumbersMapping(pos1, pos2, numbers);
-    }
+
+    // let smallest = numbers[pos1] < numbers[pos2] ? pos1 : pos2;
+    // if(numbers[smallest] > numbers[pos3]){
+    //   this.swapNumbersMapping(smallest, pos3, numbers);
+    // }
+    // if(numbers[pos1] > numbers[pos2]){
+    //   this.swapNumbersMapping(pos1, pos2, numbers);
+    // }
+
     return pos2;
   }
 
-  private swapNumbers(index: number, index2: number, numbers: number[]): void {
+  private static swapNumbers(index: number, index2: number, numbers: number[]): void {
     const tempNum = numbers[index];
     numbers[index] = numbers[index2];
     numbers[index2] = tempNum;
@@ -281,11 +293,11 @@ export class BubbleSortComponent implements OnInit {
     this.sortActionList.push([0, index, index2]);   //  swap numbers
     this.sortActionList.push([3, index, index2]);   //  color before
     this.sortActionList.push([4, index, index2]);   //  color after
-    this.swapNumbers(index, index2, numbers);
+    BubbleSortComponent.swapNumbers(index, index2, numbers);
 
   }
 
-  private colorIndex(index: number, index2: number, color: string): void {
+  private static colorIndex(index: number, index2: number, color: string): void {
     if (index !== -1) {
       document.getElementById('' + index).style.backgroundColor = color;
     }
@@ -294,7 +306,7 @@ export class BubbleSortComponent implements OnInit {
     }
   }
 
-  private moveNum(moveToIndex: number, moveFromIndex: number, numbers: number[]): void {
+  private static moveNum(moveToIndex: number, moveFromIndex: number, numbers: number[]): void {
     const tempNum: number = numbers[moveFromIndex];
     numbers.splice(moveFromIndex, 1);
     numbers.splice(moveToIndex, 0, tempNum);
@@ -306,7 +318,7 @@ export class BubbleSortComponent implements OnInit {
     this.sortActionList.push([1, moveToIndex, moveFromIndex]);   //  move number
     this.sortActionList.push([3, moveToIndex, -1]);   //  color before
     this.sortActionList.push([4, moveToIndex, -1]);   //  color after
-    this.moveNum(moveToIndex, moveFromIndex, numbers);
+    BubbleSortComponent.moveNum(moveToIndex, moveFromIndex, numbers);
 
   }
 
@@ -318,7 +330,7 @@ export class BubbleSortComponent implements OnInit {
    * @param lastIndex
    * @private
    */
-  private firstLargest(numbers: number[], firstIndex: number, lastIndex: number): number {
+  private static firstLargest(numbers: number[], firstIndex: number, lastIndex: number): number {
     //  pivot is at the very end 'lastIndex'
     const pivot: number = numbers[lastIndex];
     for (let i = firstIndex; i < lastIndex; i++) {
@@ -376,14 +388,11 @@ export class BubbleSortComponent implements OnInit {
     this.stopSort();
   }
 
-  getIterationSpeed(): number {
-    return this.iterationTime;
-  }
 
   stopSort(): void {
     clearInterval(this.sortId);
     for (let i = 0; i < this.randomNumberArray.length; i++) {
-      this.colorIndex(i, -1, this.colorNeutral);
+      BubbleSortComponent.colorIndex(i, -1, this.colorNeutral);
     }
   }
 }

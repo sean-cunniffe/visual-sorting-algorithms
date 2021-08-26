@@ -1,26 +1,77 @@
 <div class="controls-container">
   <div class="slider-container">
     <h6>Number of elements</h6>
-<input type="number" value="20" class="custom-range slider form-control" min="10" max="200" id="ArraySize"
-       (change)="$event.target.value =$event.target.value > 200 ? 200 : $event.target.value;setArraySize($event.target.value);generateRandomNumberArray(100,sizeOfArray)">
+    <input type="number" value="20" class="custom-range slider form-control" min="10" max="200" id="ArraySize"
+           (change)="$event.target.value =$event.target.value > 200 ? 200 : $event.target.value;setArraySize($event.target.value);generateRandomNumberArray(100,sizeOfArray)">
   </div>
   <div class="slider-container">
     <h6>Iteration speed (ms)</h6>
     <input type="number" class="custom-range slider form-control" value="50" min="10" max="10000" id="iterationSpeed"
            (change)="$event.target.value =$event.target.value < 10 ? 10 : $event.target.value; setIterationSpeed($event.target.value)">
   </div>
-<select class="custom-select selector" name="sort type"
-        (change)="setSortType($event.target.value);generateRandomNumberArray(100,sizeOfArray);stopSort();">
-  <option value="Merge Sort">Merge Sort</option>
-  <option value="Selection Sort">Selection Sort</option>
-  <option value="Quick Sort">Quick Sort</option>
-  <option value="Bubble Sort">Bubble Sort</option>
-</select>
-<button class="btn btn-primary" id="sortButton" (click)="sort(randomNumberArray)">Sort</button>
+  <select class="custom-select selector mt-auto mb-auto" name="sort type"
+          (change)="setSortType($event.target.value);generateRandomNumberArray(100,sizeOfArray);stopSort();">
+    <option value="Merge Sort">Merge Sort</option>
+    <option value="Selection Sort">Selection Sort</option>
+    <option value="Quick Sort">Quick Sort</option>
+    <option value="Bubble Sort">Bubble Sort</option>
+  </select>
+  <button class="btn btn-primary  mt-auto mb-auto" id="sortButton" (click)="sort(randomNumberArray)">Sort</button>
 </div>
 <div id="bar-container" class="bar-container">
   <div *ngFor="let i of randomNumberArray; index as index">
-    <div id="{{index}}" class="bar" [style.height.%] ="i" [style.width.vw]="50/sizeOfArray"></div>
+    <div id="{{index}}" class="bar" [style.height.%]="i" [style.width.vw]="50/sizeOfArray"></div>
   </div>
 </div>
-<h3 class="text-center mt-2" >{{processText}}</h3>
+<h3 class="text-center mt-2 mb-5">{{processText}}</h3>
+<div class="w-50 m-auto overflow-hidden" *ngIf="sortType === 'Merge Sort'">
+  <p class="text-center">Merge sort works by splitting a list into two sub-lists. This process happens with both
+    sub-lists recursively till
+    a sublist is only one element. The now one element sublist is merged with the other one element sublist. As merged
+    lists are already sorted, merging the next lists is efficient. </p>
+  <div class="d-flex flex-column">
+    <i class="text-center mt-5 mb-1">Dividing List into sublist</i>
+    <img class="w-75 m-auto" src="/assets/merge_sort_working.png" alt="">
+    <i class="text-center  mt-5 mb-1">Merging sub-lists together</i>
+    <img class="w-75 m-auto" src="/assets/mergin_of_two_lists.png" alt="">
+    <i class="text-center font-weight-bold mb-3">Image source:
+      https://www.interviewbit.com/tutorial/merge-sort-algorithm/</i>
+  </div>
+</div>
+<div class="w-50 m-auto overflow-hidden" *ngIf="sortType === 'Bubble Sort'">
+  <p class="text-center">Bubble sort works by starting at the first element and comparing it to the next element. If the
+    first element
+    is larger, the two elements are swapped and we continue with the next element. If the second element is larger, we
+    use that element to compare
+    with the next element. This sorting algorithm is one of the simplest sorting algorithms.</p>
+  <div class="d-flex flex-column">
+    <i class="text-center mt-5 mb-1">Bubble sort example</i>
+    <img class="w-75 m-auto" src="/assets/bubble-sort.png" alt="">
+    <i class="text-center font-weight-bold mb-3">Image source: https://www.productplan.com/glossary/bubble-sort/</i>
+  </div>
+</div>
+<div class="w-50 m-auto overflow-hidden" *ngIf="sortType === 'Selection Sort'">
+  <p class="text-center">Selection sort works by finding the smallest element and swapping it with the first element. It
+    then finds the next smallest number and swaps it with the second element, and so on. As the sorting algorithm goes
+    on the unsorted list
+    gets smaller and faster to transverse. This sorting algorithm is preferable when writing to memory is more expensive
+    than reading.</p>
+  <div class="d-flex flex-column">
+    <i class="text-center mt-5 mb-1">Selection sort example</i>
+    <img class="w-75 m-auto" src="/assets/selection_sort.png" alt="">
+    <i class="text-center font-weight-bold mb-3">Image source:
+      https://www.hackerearth.com/practice/algorithms/sorting/selection-sort/tutorial/</i>
+  </div>
+</div>
+<div class="w-50 m-auto overflow-hidden" *ngIf="sortType === 'Quick Sort'">
+  <p class="text-center">Quick Sort works by selecting a pivot and moving all smaller values to the left and larger
+    values to the right. As quick sort is recursive, we do the same thing with the values on the left side of the pivot
+    and the values on the right side of the pivot</p>
+  <div class="d-flex flex-column">
+    <i class="text-center mt-5 mb-1">Quick sort example</i>
+    <img class="w-75 m-auto" src="/assets/quick_sort.png" alt="">
+    <i class="text-center font-weight-bold mb-3">Image source:
+      https://www.johncanessa.com/2021/01/15/quicksort/</i>
+  </div>
+</div>
+
